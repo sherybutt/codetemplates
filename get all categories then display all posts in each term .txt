@@ -1,0 +1,49 @@
+/-------------- get all categories then display all posts in each term --------------- /
+
+
+<?php
+$cat_terms = get_terms(
+                array('category'),
+                array(
+                        'hide_empty'    => false,
+                        'orderby'       => 'name',
+                        'order'         => 'ASC',
+                    )
+            );
+
+
+//var_dump($cat_terms);
+
+if( $cat_terms ) :
+
+    foreach( $cat_terms as $term ) :
+
+        echo '<h3><a href="'. get_term_link($term) .'">'. $term->name .'</a><h3>';
+
+        $args = array(
+                'post_type'             => 'post',
+                'posts_per_page'        => -1, //specify yours
+                'post_status'           => 'publish',
+                'tax_query'             => array(
+                                            array(
+                                                'taxonomy' => 'category',
+                                                'field'    => 'slug',
+                                                'terms'    => $term->slug,
+                                            ),
+                                        ),
+            );
+        $ox_posts = new WP_Query( $args );
+
+        if( $ox_posts->have_posts() ) :
+            while( $ox_posts->have_posts() ) : $ox_posts->the_post();
+
+                echo '<h3 style="color:red;">'. get_the_title() .'</h3>';
+
+            endwhile;
+        endif;
+        wp_reset_postdata(); //important
+
+
+    endforeach;
+
+endif;

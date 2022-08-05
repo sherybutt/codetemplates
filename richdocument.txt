@@ -1,0 +1,176 @@
+// TO GET CATEGORIES ASSIGNED TO GENERAL POST
+get_the_category_list(', ');
+
+----------------------------------------------------------------------------------------
+
+//TO GET AUTHOR WITH ARCIEVE LINK
+get_the_author_posts_link();
+
+----------------------------------------------------------------------------------------
+
+//GET PREVIOUS AND NEXT POST
+<div class="pre-next-post">
+
+<?php					
+	$prev_post = get_adjacent_post(false, '', true);
+					   
+	if(!empty($prev_post)) {
+		
+		echo '<a href="' . get_permalink($prev_post->ID) . '" title="' . $prev_post->post_title . '" class="pre-post">' . $prev_post->post_title . '</a>'; 
+		
+	}
+	
+	$next_post = get_adjacent_post(false, '', false);
+					   
+	if(!empty($next_post)) {
+		
+		echo '<a href="' . get_permalink($next_post->ID) . '" title="' . $next_post->post_title . '" class="next-post">' . $next_post->post_title . '</a>'; 
+		
+	}
+				
+?>
+</div>
+
+----------------------------------------------------------------------------------------
+
+//GET COMMENTS SECTION ON ANY PAGE
+<?php 
+	if ( comments_open() )	{	
+	
+		$withcomments = "1";
+
+		comments_template();
+	}
+?>
+
+----------------------------------------------------------------------------------------
+
+// Change Genesis search field placeholder
+function themeprefix_search_button_text( $text ) {
+	return ( 'Search our site here...');
+}
+add_filter( 'genesis_search_text', 'themeprefix_search_button_text' );
+
+----------------------------------------------------------------------------------------
+
+//Shortcode for get post by ID argument
+
+function testimonials_single_shortcode($atts){
+
+	$id = shortcode_atts( array(
+		'id'  =>  '100073'
+	), $atts );
+
+	$my_postid = esc_attr($id['id']);
+
+	$testimonials_html = '';
+	$testimonials_html .= '<div class="testimonials single">';
+	$testimonials_html .= '<div class="testimonial-block">';
+	$testimonials_html .= '<div class="client-shot">';
+	$testimonials_html .= '<img src="'. get_the_post_thumbnail_url($my_postid) .'" alt="Client Headshot">';
+	$testimonials_html .= '</div>';
+	$testimonials_html .= '<div class="client-content">';
+	$testimonials_html .= '<div class="client-msg">';
+	$testimonials_html .= ''. get_post_field('post_content', $id) .'';
+	$testimonials_html .= '</div>';
+	$testimonials_html .= '<div class="client-meta">';
+	$testimonials_html .= '<span class="client_name">'. get_the_title($my_postid) .'</span>';
+	$testimonials_html .= '<span class="client_country">'. get_field('testimonial_meta', $my_postid) .'</span>';
+	$testimonials_html .= '</div>';
+	$testimonials_html .= '</div>';
+	$testimonials_html .= '</div>';
+	$testimonials_html .= '</div>';
+
+	return $testimonials_html;
+
+}
+add_shortcode( 'testimonials-single', 'testimonials_single_shortcode' );
+
+
+----------------------------------------------------------------------------------------
+
+// Add class to the header on scroll
+$(window).scroll(function() {    
+var scroll = $(window).scrollTop();
+if (scroll >= 100) {
+$(".site-header").addClass("active");
+} else {
+$(".site-header").removeClass("active");
+}
+});
+
+
+----------------------------------------------------------------------------------------
+
+//Set cookie for popup form garvity form
+add_action( 'gform_after_submission_3', function() {
+    setcookie( 'popup_submitted', 'popup_submitted' );
+});
+
+add_filter( 'body_class', 'body_class_before_header' );
+function body_class_before_header( $classes ) {
+
+  if(isset($_COOKIE['popup_submitted'])) {
+        $classes[] = 'noPopup';
+    }
+
+    //return $classes anyway
+    return $classes;
+}
+
+
+----------------------------------------------------------------------------------------
+
+//Scroll to top to specific div
+	$(".vid-info").click(function() {
+		$('html, body').animate({
+			scrollTop: $(".header-player").offset().top - 200
+		}, 1000);
+
+	});
+
+----------------------------------------------------------------------------------------
+
+/**
+ * Scroll to ID
+ */
+
+$('a[href*="#"]').on('click', function (e) {
+  e.preventDefault()
+
+  $('html, body').animate(
+    {
+      scrollTop: $($(this).attr('href')).offset().top,
+    },
+    500,
+    'linear'
+  )
+})
+
+
+----------------------------------------------------------------------------------------
+/**
+ * Menu Open besides
+ */
+ 
+.site-header .genesis-nav-menu > .menu-item.menu-item-has-children > .sub-menu > .menu-item.menu-item-has-children {
+	position: relative;
+}
+.site-header .genesis-nav-menu > .menu-item.menu-item-has-children > .sub-menu > .menu-item.menu-item-has-children > .sub-menu {
+	position: absolute;
+	left: 100%;
+	top: 0;
+	margin: 0;
+	display: none;
+}
+
+
+--------------------------------------------------------------------------------------
+/** Display posts based on ids more **/
+
+extract(shortcode_atts(array(
+    'ids' => ''
+), $atts));
+
+$id_array = explode(',', $ids); 
+Then you just have to use 'post__in' => $id_array
