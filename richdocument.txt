@@ -174,3 +174,13 @@ extract(shortcode_atts(array(
 
 $id_array = explode(',', $ids); 
 Then you just have to use 'post__in' => $id_array
+
+--------------------------------------------------------------------------------------
+/** Add JS that runs on every screen size change **/
+var WindowsSize=function(){
+	if (window.matchMedia('(max-width: 600px) ').matches) {
+
+	}
+};
+$(document).ready(WindowsSize); 
+$(window).resize(WindowsSize);
