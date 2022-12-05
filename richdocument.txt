@@ -184,3 +184,12 @@ var WindowsSize=function(){
 };
 $(document).ready(WindowsSize); 
 $(window).resize(WindowsSize);
+
+--------------------------------------------------------------------------------------
+/** If user coming from specific page to your page **/
+jQuery(document).ready(function($) {
+  var referrer =  document.referrer;
+  if (referrer == 'http://domain.tld/') {
+    // Make whatever you like  
+  }
+});
