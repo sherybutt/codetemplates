@@ -18,7 +18,7 @@ if( $cat_terms ) :
 
     foreach( $cat_terms as $term ) :
 
-        echo '<h3><a href="'. get_term_link($term) .'">'. $term->name .'</a><h3>';
+        echo '<h3><a href="'. get_term_link($term) .'">'. $term->name .'</a></h3>';
 
         $args = array(
                 'post_type'             => 'post',
