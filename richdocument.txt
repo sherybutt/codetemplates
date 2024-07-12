@@ -193,3 +193,10 @@ jQuery(document).ready(function($) {
     // Make whatever you like  
   }
 });
+
+
+--------------------------------------------------------------------------------------
+/** Add class to any element if xyz cookie is present **/
+if (document.cookie.indexOf("wpmd_steps_checklist=") >= 0) {
+	$("html").addClass("hide-checklist-popup");
+}
